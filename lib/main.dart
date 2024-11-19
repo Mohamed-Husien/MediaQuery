@@ -1,37 +1,50 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MediaQueryTest());
+  runApp(const LayoutBuilderTest());
 }
 
-class MediaQueryTest extends StatelessWidget {
-  const MediaQueryTest({super.key});
+class LayoutBuilderTest extends StatelessWidget {
+  const LayoutBuilderTest({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
     return MaterialApp(
       home: Scaffold(
-        body: Column(
-          children: [
-            Container(
-              color: Colors.amberAccent,
-              height: height * .2,
-              width: 200,
-            ),
-            Container(
-              color: Colors.black,
-              height: height * .2,
-              width: 200,
-            ),
-            Container(
-              color: Colors.red,
-              height: height * .2,
-              width: 200,
-            ),
-          ],
-        ),
+        body: LayoutBuilder(builder: (context, constraints) {
+          log(constraints.maxWidth.toString());
+          if (constraints.maxWidth <= 500) {
+            return const MobileLayout();
+          } else {
+            return const Center(
+              child: Text("Another platform"),
+            );
+          }
+        }),
       ),
     );
+  }
+}
+
+class MobileLayout extends StatelessWidget {
+  const MobileLayout({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            color: Colors.green,
+            child: ListTile(
+              title: Text("${index + 1}"),
+            ),
+          );
+        });
   }
 }
