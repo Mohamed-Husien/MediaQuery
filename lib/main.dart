@@ -18,9 +18,7 @@ class LayoutBuilderTest extends StatelessWidget {
           if (constraints.maxWidth <= 500) {
             return const MobileLayout();
           } else {
-            return const Center(
-              child: Text("Another platform"),
-            );
+            return const AnotherLayout();
           }
         }),
       ),
@@ -46,5 +44,47 @@ class MobileLayout extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class AnotherLayout extends StatefulWidget {
+  const AnotherLayout({super.key});
+
+  @override
+  State<AnotherLayout> createState() => _AnotherLayoutState();
+}
+
+class _AnotherLayoutState extends State<AnotherLayout> {
+  int number = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Center(
+            child: SizedBox(
+              child: Text(number.toString()),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  color: Colors.green,
+                  child: ListTile(
+                    onTap: () {
+                      number = index + 1;
+                      setState(() {});
+                    },
+                    title: Text("${index + 1}"),
+                  ),
+                );
+              }),
+        ),
+      ],
+    );
   }
 }
